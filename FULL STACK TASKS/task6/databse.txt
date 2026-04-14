@@ -1,0 +1,53 @@
+-- Main Table
+CREATE TABLE employees (
+    emp_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    department VARCHAR(50),
+    salary DOUBLE
+);
+
+-- Log Table (Audit Table)
+CREATE TABLE employee_log (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    emp_id INT,
+    action_type VARCHAR(20),
+    action_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 🔥 TRIGGER: AFTER INSERT
+DELIMITER //
+CREATE TRIGGER after_insert_employee
+AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO employee_log(emp_id, action_type)
+    VALUES (NEW.emp_id, 'INSERT');
+END;
+//
+DELIMITER ;
+
+-- 🔥 TRIGGER: AFTER UPDATE
+DELIMITER //
+CREATE TRIGGER after_update_employee
+AFTER UPDATE ON employees
+FOR EACH ROW
+BEGIN
+    INSERT INTO employee_log(emp_id, action_type)
+    VALUES (NEW.emp_id, 'UPDATE');
+END;
+//
+DELIMITER ;
+
+-- Sample Data
+INSERT INTO employees(name, department, salary) VALUES
+('Aparna','CSE',50000),
+('Rahul','IT',40000);
+
+-- 🔥 VIEW: Daily Activity Report
+CREATE VIEW daily_activity AS
+SELECT 
+    DATE(action_time) AS date,
+    action_type,
+    COUNT(*) AS total_actions
+FROM employee_log
+GROUP BY DATE(action_time), action_type;
