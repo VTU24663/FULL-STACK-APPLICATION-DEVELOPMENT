@@ -37,8 +37,6 @@ online_exam_system/
 └── README.md
 ```
 
-> ⚠️ Update this structure to match your actual folder layout.
-
 ---
 
 ## ⚙️ Getting Started
@@ -110,11 +108,7 @@ The app should now be running at `http://localhost:3000`.
 
 ---
 
-## 📸 Screenshots
 
-> Add screenshots of your app here!
-
----
 
 ## 🙋‍♂️ Author
 
